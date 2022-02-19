@@ -3,28 +3,43 @@ from SpriteSheet import SpriteSheet
 
 from pygame.locals import K_UP, K_DOWN, K_LEFT, K_RIGHT
 
-sprite_sheet_image = pygame.image.load(
-    "Assets/mystic_woods_free_v0.2/sprites/characters/player.png"
-)
-sprite_sheet = SpriteSheet(sprite_sheet_image)
+sprite_sheet = SpriteSheet("Assets/trainer_sheet.png", "Assets/trainer_sheet.json")
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        # self.surf = pygame.Surface((75, 25))
-        # self.surf.fill((255, 255, 255))
-        self.surf = sprite_sheet.get_image(0, 50, 50, 2, (135, 206, 250))
+
+        # load the image into a list
+        self.sprites = [
+            sprite_sheet.parse_sprite(f"trainer{i + 1}.png") for i in range(0, 5)
+        ]
+
+        # rescale the image
+        # self.surf = pygame.transform.scale(self.surf, (70, 70))
+
+        # get index of current image
+        self.index = 0
+
+        self.surf = self.sprites[self.index]
         self.rect = self.surf.get_rect()
 
     def update(self, pressed_keys, screen_width, screen_height):
         if pressed_keys[K_UP]:
+            self.index = int((self.index + 1) % 5)
+            self.surf = self.sprites[self.index]
             self.rect.move_ip(0, -5)
         if pressed_keys[K_DOWN]:
+            self.index = int((self.index + 1) % 5)
+            self.surf = self.sprites[self.index]
             self.rect.move_ip(0, 5)
         if pressed_keys[K_LEFT]:
+            self.index = int((self.index + 1) % 5)
+            self.surf = self.sprites[self.index]
             self.rect.move_ip(-5, 0)
         if pressed_keys[K_RIGHT]:
+            self.index = int((self.index + 1) % 5)
+            self.surf = self.sprites[self.index]
             self.rect.move_ip(5, 0)
 
         # check whether player exceeds window horizontal

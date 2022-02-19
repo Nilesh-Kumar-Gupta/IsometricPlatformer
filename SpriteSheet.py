@@ -1,14 +1,28 @@
 import pygame
+import json
 
 
 class SpriteSheet:
-    def __init__(self, image):
-        self.sheet = image
+    def __init__(self, filename, metadata):
+        self.filename = filename
+        self.metadata = metadata
 
-    def get_image(self, frame, width, height, scale, colour):
-        image = pygame.Surface((width, height))
-        image.blit(self.sheet, (0, 0), ((frame * width), 0, width, height))
-        image = pygame.transform.scale(image, (width * scale, height * scale))
-        image.set_colorkey(colour)
+        # load spritesheet
+        self.sprite_sheet = pygame.image.load(self.filename)
 
-        return image
+        # load metadata
+        with open(self.metadata) as f:
+            self.data = json.load(f)
+
+    def get_sprite(self, x, y, width, height):
+        sprite = pygame.Surface((width, height))
+
+        # the transparent pixels are rendered as black, so this does not compute those black pixels
+        # this only applies to value that are exactly (0, 0, 0) so any other values would not be ignored
+        sprite.set_colorkey((0, 0, 0))
+        sprite.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
+        return sprite
+
+    def parse_sprite(self, name):
+        sprite = self.data["frames"][name]["frame"]
+        return self.get_sprite(sprite["x"], sprite["y"], sprite["w"], sprite["h"])

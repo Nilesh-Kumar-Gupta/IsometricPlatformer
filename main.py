@@ -55,8 +55,10 @@ while running:
     # update enemy
     enemies.update()
 
+    # set background
     screen.fill((135, 206, 250))
 
+    # display every entity
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
 
