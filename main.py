@@ -1,6 +1,7 @@
 import pygame
 from Player import Player
 from Enemy import Enemy
+from Platform import Platform
 
 from pygame.locals import (
     K_ESCAPE,
@@ -27,6 +28,10 @@ player = Player()
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
+
+# initializing platform
+block = Platform(SCREEN_WIDTH, SCREEN_HEIGHT)
+all_sprites.add(block)
 
 # define framerate
 clock = pygame.time.Clock()
